@@ -6,10 +6,14 @@
     /// </summary>
     public class Factura
     {
-        public int Numero;
-        public DateTime Fecha;
-        public Cliente Cliente;
-        public List<RenglonFactura> Renglones;
+        public int Numero { get; set; }
+        public DateTime Fecha { get; set; }
+        public Cliente Cliente { get; set; }
+        public List<RenglonFactura> Renglones { get; set; }
+        public decimal TotalSinImpuestos { get; set; }
+        public decimal PorcentajeIVA { get; set; }
+        public decimal IVA { get; set; }
+        public decimal TotalConImpuestos { get; set; }
     }
 
     /// <summary>
@@ -18,7 +22,8 @@
     /// </summary>
     public class RenglonFactura
     {
-        public Articulo Articulo;
-        public int cantidad;
+        public Articulo Articulo { get; set; }
+        public int cantidad { get; set; }
+        public decimal SubTotal {  get; set; }
     }
 }

@@ -6,8 +6,8 @@
     /// </summary>
     public class Articulo
     {
-        public string Codigo;
-        public string Descripcion;
-        public double Precio;
+        public string Codigo { get; set; }
+        public string Descripcion  { get; set; }
+        public double Precio { get; set; }
     }
 }

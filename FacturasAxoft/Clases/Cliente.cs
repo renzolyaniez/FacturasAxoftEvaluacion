@@ -9,5 +9,6 @@
         public string Cuil;
         public string Nombre;
         public string Direccion;
+        public decimal PorcentajeIVA;
     }
 }

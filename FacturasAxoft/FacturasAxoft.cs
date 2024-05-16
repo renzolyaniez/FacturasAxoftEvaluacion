@@ -1,4 +1,7 @@
-﻿namespace FacturasAxoft
+﻿using FacturasAxoft.Clases;
+using System.Xml.Serialization;
+
+namespace FacturasAxoft
 {
     public class FacturasAxoft
     {
@@ -25,7 +28,22 @@
         {
             // Completar acá con el código necesario para cargar las facturas desde el xml.
             // Al momento de hacer las validaciones, utilizar la clase ValidadorFacturasAxoft.
-            throw new NotImplementedException();
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Facturas));
+
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            {
+                Facturas facturas = (Facturas)serializer.Deserialize(fs);
+
+                // Ahora puedes trabajar con el objeto `facturas`
+
+                foreach (var factura in facturas.Factura)
+                {
+                   
+                }
+            }
+
+
         }
 
         /// <summary>
