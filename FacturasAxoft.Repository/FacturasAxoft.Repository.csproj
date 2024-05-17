@@ -3,12 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FacturasAxoft.Interfaces\FacturasAxoft.Interfaces.csproj" />
-    <ProjectReference Include="..\FacturasAxoft.Repository\FacturasAxoft.Repository.csproj" />
   </ItemGroup>
 
 </Project>

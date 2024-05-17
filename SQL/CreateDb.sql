@@ -82,3 +82,29 @@ REFERENCES [dbo].[Clientes] ([Id])
 GO
 ALTER TABLE [dbo].[Facturas] CHECK CONSTRAINT [FK_Facturas_Clientes]
 GO
+
+
+-- Insercion de datos 
+insert into Clientes (Cuil, Nombre, Direccion, PorcentajeIVA) values
+('20345678901','Juan Perez','Calle 123, Ciudad',21);
+
+insert into Clientes (Cuil, Nombre, Direccion, PorcentajeIVA) values
+('30567890123','María Gómez','Avenida 456, Ciudad',21);
+
+insert into Clientes (Cuil, Nombre, Direccion, PorcentajeIVA) values
+('90876543210','Luis Rodríguez','Plaza 789, Ciudad',21);
+
+
+insert into Articulos (Codigo, Descripcion, Precio) values
+('AR001','Producto 1', 30);
+
+insert into Articulos (Codigo, Descripcion, Precio) values
+('AR002','Producto 2', 20);
+
+insert into Articulos (Codigo, Descripcion, Precio) values
+('AR003','Producto 3', 15);
+
+insert into Articulos (Codigo, Descripcion, Precio) values
+('AR020','Producto 20', 25);
+
+GO

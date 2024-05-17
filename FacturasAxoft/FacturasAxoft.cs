@@ -1,5 +1,9 @@
 ﻿using FacturasAxoft.Clases;
+using FacturasAxoft.Interfaces;
+using FacturasAxoft.Repository;
+using Microsoft.Data.SqlClient;
 using System.Xml.Serialization;
+using System.Data;
 
 namespace FacturasAxoft
 {
@@ -31,16 +35,75 @@ namespace FacturasAxoft
 
             XmlSerializer serializer = new XmlSerializer(typeof(Facturas));
 
+            IServiceBaseDatos serviceBaseDatos = new ServiceBaseDatos(connectionString);
+
+            serviceBaseDatos.AbrirConexion();
+
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {
                 Facturas facturas = (Facturas)serializer.Deserialize(fs);
 
                 // Ahora puedes trabajar con el objeto `facturas`
 
-                foreach (var factura in facturas.Factura)
+
+                serviceBaseDatos.IniciarTransaccion();
+
+                try
                 {
-                   
+                    foreach (var factura in facturas.Factura)
+                    {
+                        //- Primero insertamos la cabecera de la factura
+                        string sentencia = @"insert into Facturas (Numero, Fecha, Clienteid, 
+                                        TotalSinImpuestos,
+                                      PorcentajeIVA, TotalIVA,TotalConImpuestos) 
+                                      values (@numero, @fecha, @ClienteId, @TotalSinImpuestos, 
+                                      @PorcentajeIVA, @TotalIVA,@TotalConImpuestos)";
+                        SqlParameter[] parametrosFactura =
+                        {
+                            new SqlParameter("@numero", SqlDbType.Int) { Value = factura.Numero },
+                            new SqlParameter("@fecha", SqlDbType.Date) { Value = factura.Fecha },
+                            new SqlParameter("@ClienteId", SqlDbType.Int) { Value = serviceBaseDatos.GetClienteId(factura.Cliente.Cuil) },
+                            new SqlParameter("@TotalSinImpuestos", SqlDbType.Decimal) { Value = factura.TotalSinImpuestos },
+                            new SqlParameter("@PorcentajeIVA", SqlDbType.Decimal) { Value = factura.Iva },
+                            new SqlParameter("@TotalIVA", SqlDbType.Decimal) { Value = factura.ImporteIva },
+                            new SqlParameter("@TotalConImpuestos", SqlDbType.Decimal) { Value = factura.TotalConImpuestos }
+                        };
+
+                        var numeroFacturaInsertada = serviceBaseDatos.InsertarRegistroEnTabla(sentencia, parametrosFactura);
+
+                        
+                        foreach (var renglon in factura.Renglones)
+                        {
+                            //@facturaId, @articuloId, @cantidad, @subTotal
+                            sentencia = @"insert into FacturaRenglones (FacturaId, ArticuloId, Cantidad, 
+                                        Subtotal) 
+                                      values (@facturaId, @articuloId, @cantidad, @subTotal)";
+                            SqlParameter[] parametrosRenglones =
+                            {
+                            new SqlParameter("@facturaId", SqlDbType.Int) { Value = numeroFacturaInsertada },
+                            new SqlParameter("@articuloId", SqlDbType.Int) { Value = serviceBaseDatos.GetArticuloId(renglon.CodigoArticulo) },
+                            new SqlParameter("@cantidad", SqlDbType.Int) { Value = renglon.Cantidad },
+                            new SqlParameter("@subTotal", SqlDbType.Decimal) { Value = renglon.Total }
+
+                            };
+
+                            var renglonInsertado = serviceBaseDatos.InsertarRegistroEnTabla(sentencia, parametrosRenglones);
+
+                        }
+
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+
+                    serviceBaseDatos.CancelarTransaccion();
+                }
+
+                serviceBaseDatos.ConfirmarTransaccion();
+                serviceBaseDatos.CerrarConexion();
+
+                Console.WriteLine("Facturas Procesadas con exito");
             }
 
 

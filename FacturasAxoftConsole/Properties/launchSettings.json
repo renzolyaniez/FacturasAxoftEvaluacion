@@ -2,7 +2,7 @@
   "profiles": {
     "FacturasAxoftConsole": {
       "commandName": "Project",
-      "commandLineArgs": "\"Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;\" \"CargarFacturas\" \"C:\\Users\\Renzo\\source\\repos\\FacturasAxoft\\XML\\Ejemplo.xml\""
+      "commandLineArgs": "\"Data Source=PC-RENZO\\SQLEXPRESS02;Initial Catalog=FacturasAxoft;Integrated Security=SSPI;TrustServerCertificate=true;\" \"CargarFacturas\" \"C:\\Users\\Renzo\\source\\repos\\FacturasAxoft\\XML\\Ejemplo.xml\""
     }
   }
 }
