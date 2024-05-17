@@ -36,16 +36,16 @@ namespace FacturasAxoft.Repository
 
                 var resultado = command.ExecuteScalar();
 
-                if (resultado!=null)
+                if (resultado != null)
                 {
                     return (decimal)resultado;
                 }
-       
+
                 return 0;
             }
         }
 
-        public int GetArticuloId(string codigoArticulo)
+        public int TraerIdArticulo(string codigoArticulo)
         {
             var query = "select id from Articulos where Codigo = @codigo";
 
@@ -67,7 +67,7 @@ namespace FacturasAxoft.Repository
                 return 0;
             }
         }
-        public int GetClienteId(string cuil)
+        public int TraerIdCliente(string cuil)
         {
             var query = "select id from Clientes where Cuil = @cuil";
 
@@ -102,6 +102,25 @@ namespace FacturasAxoft.Repository
         {
             _connection.Close();
             _connection.Dispose();
+        }
+
+        public DataTable EjecutarProcedimientoAlmacenado(string procedureName, SqlParameter[]? parameters)
+        {
+            using (SqlCommand command = new SqlCommand(procedureName, _connection, _transaction))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                if (parameters != null)
+                {
+                    command.Parameters.AddRange(parameters);
+                }
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    DataTable dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    return dataTable;
+                }
+            }
         }
     }
 }

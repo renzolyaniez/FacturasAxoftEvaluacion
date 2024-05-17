@@ -108,3 +108,59 @@ insert into Articulos (Codigo, Descripcion, Precio) values
 ('AR020','Producto 20', 25);
 
 GO
+
+-- Stored Procedures
+CREATE or ALTER PROCEDURE SP_Traer3ArticulosMasVendidos
+	 
+AS
+BEGIN
+select top(3) max(ar.Codigo) as Codigo, max(ar.Descripcion) as Descripcion, sum(fr.Cantidad) as Total_Vendido
+from FacturaRenglones as fr inner join
+Articulos as ar on fr.ArticuloId = ar.Id 
+group by fr.ArticuloId order by SUM(fr.Cantidad) desc;
+
+END
+GO
+
+CREATE or ALTER PROCEDURE SP_Traer3ClientesQueMasCompraron 
+
+AS
+BEGIN
+
+select top(3) max(cl.Cuil) as cuil, max(cl.Nombre) nombre , sum(fc.Totalconimpuestos) as Total_Comprado
+  from Facturas as fc inner join Clientes as cl
+  on fc.ClienteId=cl.Id
+  group by fc.ClienteId
+  order by sum(fc.totalconimpuestos) desc 
+END
+GO
+
+CREATE or ALTER PROCEDURE sp_PromedioComprasporClienteYarticuloMasComprado
+	 @cuil varchar(11)
+AS
+BEGIN
+ declare 
+
+ @clientenombre varchar(50) ,
+ @promediocompras decimal(18,4),
+ @articulomascomprado varchar(50),
+ @idCliente int
+
+
+ select @clientenombre = max(cl.Nombre), @promediocompras = avg(fc.Totalconimpuestos)  , @idCliente=max(cl.id)
+  from Facturas as fc inner join Clientes as cl
+  on fc.ClienteId=cl.Id
+  where cl.Cuil=@cuil ;
+ 
+  select top(1) @articulomascomprado= max(ar.Descripcion)  
+  from  Facturas fc inner join FacturaRenglones rg on fc.id = rg.FacturaId 
+   inner join Articulos ar on rg.ArticuloId = ar.Id
+  where fc.ClienteId= @idCliente 
+    group by rg.ArticuloId
+	order by sum(rg.cantidad) desc ;
+
+
+  select @clientenombre as ClienteNombre, @promediocompras as PromedioCompras , @articulomascomprado as ArticuloMasComprado
+
+END
+GO

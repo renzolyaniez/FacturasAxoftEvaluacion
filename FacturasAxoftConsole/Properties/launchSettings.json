@@ -1,8 +1,24 @@
 {
   "profiles": {
-    "FacturasAxoftConsole": {
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    },
+    "ArticulosMasVendidos": {
+      "commandName": "Project",
+      "commandLineArgs": "\"Data Source=PC-RENZO\\SQLEXPRESS02;Initial Catalog=FacturasAxoft;Integrated Security=SSPI;TrustServerCertificate=true;\" \"Get3ArticulosMasVendidos\" \"C:\\Users\\Renzo\\source\\repos\\FacturasAxoft\\XML\\Ejemplo.xml\""
+    },
+    "CargaFacturas": {
       "commandName": "Project",
       "commandLineArgs": "\"Data Source=PC-RENZO\\SQLEXPRESS02;Initial Catalog=FacturasAxoft;Integrated Security=SSPI;TrustServerCertificate=true;\" \"CargarFacturas\" \"C:\\Users\\Renzo\\source\\repos\\FacturasAxoft\\XML\\Ejemplo.xml\""
+    },
+    "Clientesmascompradores": {
+      "commandName": "Project",
+      "commandLineArgs": "\"Data Source=PC-RENZO\\SQLEXPRESS02;Initial Catalog=FacturasAxoft;Integrated Security=SSPI;TrustServerCertificate=true;\" \"Get3Compradores\" \"C:\\Users\\Renzo\\source\\repos\\FacturasAxoft\\XML\\Ejemplo.xml\""
+    },
+    "PromedioComprasYArticuloMasComprado": {
+      "commandName": "Project",
+      "commandLineArgs": "\"Data Source=PC-RENZO\\SQLEXPRESS02;Initial Catalog=FacturasAxoft;Integrated Security=SSPI;TrustServerCertificate=true;\" \"GetPromedioYArticuloMasCompradoDeCliente\" \"20345678901\""
     }
   }
 }

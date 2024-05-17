@@ -62,7 +62,7 @@ namespace FacturasAxoft
                         {
                             new SqlParameter("@numero", SqlDbType.Int) { Value = factura.Numero },
                             new SqlParameter("@fecha", SqlDbType.Date) { Value = factura.Fecha },
-                            new SqlParameter("@ClienteId", SqlDbType.Int) { Value = serviceBaseDatos.GetClienteId(factura.Cliente.Cuil) },
+                            new SqlParameter("@ClienteId", SqlDbType.Int) { Value = serviceBaseDatos.TraerIdCliente(factura.Cliente.Cuil) },
                             new SqlParameter("@TotalSinImpuestos", SqlDbType.Decimal) { Value = factura.TotalSinImpuestos },
                             new SqlParameter("@PorcentajeIVA", SqlDbType.Decimal) { Value = factura.Iva },
                             new SqlParameter("@TotalIVA", SqlDbType.Decimal) { Value = factura.ImporteIva },
@@ -71,7 +71,7 @@ namespace FacturasAxoft
 
                         var numeroFacturaInsertada = serviceBaseDatos.InsertarRegistroEnTabla(sentencia, parametrosFactura);
 
-                        
+
                         foreach (var renglon in factura.Renglones)
                         {
                             //@facturaId, @articuloId, @cantidad, @subTotal
@@ -81,7 +81,7 @@ namespace FacturasAxoft
                             SqlParameter[] parametrosRenglones =
                             {
                             new SqlParameter("@facturaId", SqlDbType.Int) { Value = numeroFacturaInsertada },
-                            new SqlParameter("@articuloId", SqlDbType.Int) { Value = serviceBaseDatos.GetArticuloId(renglon.CodigoArticulo) },
+                            new SqlParameter("@articuloId", SqlDbType.Int) { Value = serviceBaseDatos.TraerIdArticulo(renglon.CodigoArticulo) },
                             new SqlParameter("@cantidad", SqlDbType.Int) { Value = renglon.Cantidad },
                             new SqlParameter("@subTotal", SqlDbType.Decimal) { Value = renglon.Total }
 
@@ -117,7 +117,33 @@ namespace FacturasAxoft
         /// tener artículos con la misma cantidad de ventas devolver cualquiera</exception>
         public string Get3ArticulosMasVendidos()
         {
-            throw new NotImplementedException();
+            try
+            {
+                IServiceBaseDatos serviceBaseDatos = new ServiceBaseDatos(connectionString);
+
+                serviceBaseDatos.AbrirConexion();
+
+                string procedureName = "SP_Traer3ArticulosMasVendidos";
+
+                DataTable resultTable = serviceBaseDatos.EjecutarProcedimientoAlmacenado(procedureName, null);
+
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Console.WriteLine($"Codigo: {row["Codigo"]}, Descripcion: {row["Descripcion"]},  Total Vendido: {row["Total_Vendido"]}");
+                }
+
+                serviceBaseDatos.CerrarConexion();
+
+                return "Ejecucion exitosa";
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return "Errores";
+           
         }
 
         /// <summary>
@@ -127,7 +153,33 @@ namespace FacturasAxoft
         /// <exception>Mismo criterio que para artículos</exception>
         public string Get3Compradores()
         {
-            throw new NotImplementedException();
+            try
+            {
+                IServiceBaseDatos serviceBaseDatos = new ServiceBaseDatos(connectionString);
+
+                serviceBaseDatos.AbrirConexion();
+
+                string procedureName = "SP_Traer3ClientesQueMasCompraron";
+
+                DataTable resultTable = serviceBaseDatos.EjecutarProcedimientoAlmacenado(procedureName, null);
+
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Console.WriteLine($"Cuil: {row["Cuil"]}, Nombre: {row["Nombre"]},  Total Comprado: {row["Total_Comprado"]}");
+
+                }
+
+                serviceBaseDatos.CerrarConexion();
+
+                return "Ejecucion exitosa";
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return "Errores";
         }
 
         /// <summary>
@@ -138,7 +190,36 @@ namespace FacturasAxoft
         /// <exception>Si no existe el cliente, o si no tiene compras devolver un mensaje de error con el mensaje correspondiente</exception>
         public string GetPromedioYArticuloMasCompradoDeCliente(string cuil)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IServiceBaseDatos serviceBaseDatos = new ServiceBaseDatos(connectionString);
+
+                serviceBaseDatos.AbrirConexion();
+
+                string procedureName = "sp_PromedioComprasporClienteYarticuloMasComprado";
+                SqlParameter[] parametrosCuil =
+                           {
+                            new SqlParameter("@cuil", SqlDbType.VarChar) { Value = cuil } };
+
+                DataTable resultTable = serviceBaseDatos.EjecutarProcedimientoAlmacenado(procedureName, parametrosCuil);
+
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Console.WriteLine($"Nombre Cliente: {row["ClienteNombre"]}, Promedio Compras: {row["PromedioCompras"]},  Articulo mas Comprado: {row["ArticuloMasComprado"]}");
+
+                }
+
+                serviceBaseDatos.CerrarConexion();
+
+                return "Ejecucion exitosa";
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return "Errores";
         }
 
         /// <summary>

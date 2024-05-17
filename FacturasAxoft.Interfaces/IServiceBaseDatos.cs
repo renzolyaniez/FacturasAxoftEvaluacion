@@ -1,4 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Data.Common;
+using System.Data;
 
 namespace FacturasAxoft.Interfaces
 {
@@ -7,11 +9,13 @@ namespace FacturasAxoft.Interfaces
         void AbrirConexion();
         void IniciarTransaccion();
         decimal InsertarRegistroEnTabla(string query, SqlParameter[] parameters);
-        int GetArticuloId(string codigoArticulo);
-        int GetClienteId(string cuil);
+        int TraerIdArticulo(string codigoArticulo);
+        int TraerIdCliente(string cuil);
         void ConfirmarTransaccion();
         void CancelarTransaccion();
         void CerrarConexion();
+
+        public DataTable EjecutarProcedimientoAlmacenado(string procedureName, SqlParameter[] parameters);
 
     }
 }
