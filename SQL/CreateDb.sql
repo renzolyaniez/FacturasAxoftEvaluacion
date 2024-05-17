@@ -164,3 +164,47 @@ BEGIN
 
 END
 GO
+
+CREATE or ALTER PROCEDURE sp_TotalFacturadoyPromedioImporteFacturasPorFecha
+	 @fecha Date
+AS
+BEGIN
+  
+ select sum(fc.TotalConImpuestos) as TotalFacturado , avg(fc.TotalConImpuestos) PromedioImportesFactura
+ from facturas fc
+ where fc.Fecha=@fecha
+ 
+END
+GO
+
+
+create or ALTER  PROCEDURE [dbo].[sp_Top3ClientesMasCompradoresArticulo]
+	 @codigo varchar(10)
+AS
+BEGIN
+  
+ select top(3) max(cl.nombre) as NombreCliente, sum(rg.cantidad) as CantidadComprada, max(ar.descripcion) as DescripcionArticulo 
+   from Facturas fc inner join FacturaRenglones rg on fc.Id = rg.FacturaId 
+       inner join Clientes cl on fc.ClienteId =cl.Id
+	   inner join Articulos ar on rg.ArticuloId = ar.Id
+	   where ar.Codigo=@codigo
+	   group by fc.ClienteId
+	   order by sum(rg.cantidad) desc
+
+END
+go
+
+ 
+ 
+create or ALTER   PROCEDURE sp_TotalIvaPorFechas 
+	 @fechaDesde Date,
+	 @fechaHasta Date
+AS
+BEGIN
+  
+ Select sum(fc.TotalIVA) as TotalIva  
+ from facturas fc
+ where fc.Fecha between  @fechaDesde and  @fechaHasta;
+ 
+END
+go

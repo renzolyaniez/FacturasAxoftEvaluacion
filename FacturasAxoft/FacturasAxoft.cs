@@ -231,7 +231,36 @@ namespace FacturasAxoft
         /// mostrar el mensaje de error correspondiente</exception>
         public string GetTotalYPromedioFacturadoPorFecha(string fecha)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IServiceBaseDatos serviceBaseDatos = new ServiceBaseDatos(connectionString);
+
+                serviceBaseDatos.AbrirConexion();
+
+                string procedureName = "sp_TotalFacturadoyPromedioImporteFacturasPorFecha";
+                SqlParameter[] parametrosFecha =
+                           {
+                            new SqlParameter("@fecha", SqlDbType.Date) { Value = fecha } };
+
+                DataTable resultTable = serviceBaseDatos.EjecutarProcedimientoAlmacenado(procedureName, parametrosFecha);
+
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Console.WriteLine($"Total Facturado: {row["TotalFacturado"]}, Promedio Importes Factura: {row["PromedioImportesFactura"]} ");
+
+                }
+
+                serviceBaseDatos.CerrarConexion();
+
+                return "Ejecucion exitosa";
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return "Errores";
         }
 
         /// <summary>
@@ -242,7 +271,36 @@ namespace FacturasAxoft
         /// <exception>Si el artículo no existe, o no fue comprado por al menos 3 clientes devolver un mensaje de error correspondiente</exception>
         public string GetTop3ClientesDeArticulo(string codigoArticulo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IServiceBaseDatos serviceBaseDatos = new ServiceBaseDatos(connectionString);
+
+                serviceBaseDatos.AbrirConexion();
+
+                string procedureName = "sp_Top3ClientesMasCompradoresArticulo";
+                SqlParameter[] parametrosArticulo =
+                           {
+                            new SqlParameter("@codigo", SqlDbType.VarChar) { Value = codigoArticulo } };
+
+                DataTable resultTable = serviceBaseDatos.EjecutarProcedimientoAlmacenado(procedureName, parametrosArticulo);
+
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Console.WriteLine($"Nombre Cliente: {row["NombreCliente"]}, Cantidad Comprada: {row["CantidadComprada"]},  Descripcion Articulo: {row["DescripcionArticulo"]}");
+
+                }
+
+                serviceBaseDatos.CerrarConexion();
+
+                return "Ejecucion exitosa";
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return "Errores";
         }
 
         /// <summary>
@@ -252,7 +310,37 @@ namespace FacturasAxoft
         /// <exception>Si no existen facturas para las fechas ingresadas mostrar un mensaje de error</exception>
         public string GetTotalIva(string fechaDesde, string fechaHasta)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IServiceBaseDatos serviceBaseDatos = new ServiceBaseDatos(connectionString);
+
+                serviceBaseDatos.AbrirConexion();
+
+                string procedureName = "sp_TotalIvaPorFechas";
+                SqlParameter[] parametrosTotalIva =
+                           {
+                            new SqlParameter("@fechaDesde", SqlDbType.Date) { Value = fechaDesde } ,
+                            new SqlParameter("@fechaHasta", SqlDbType.Date) { Value = fechaHasta }};
+
+                DataTable resultTable = serviceBaseDatos.EjecutarProcedimientoAlmacenado(procedureName, parametrosTotalIva);
+
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Console.WriteLine($"Total de Iva: {row["TotalIva"]} ");
+
+                }
+
+                serviceBaseDatos.CerrarConexion();
+
+                return "Ejecucion exitosa";
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return "Errores";
         }
     }
 }
