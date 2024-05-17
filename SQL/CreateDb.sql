@@ -29,6 +29,7 @@ CREATE TABLE [dbo].[Clientes](
 	[Cuil] [varchar](12) NOT NULL,
 	[Nombre] [varchar](30) NOT NULL,
 	[Direccion] [varchar](50) NOT NULL,
+	[PorcentajeIva] [decimal](18, 4) NOT NULL
  CONSTRAINT [PK_Clientes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -45,6 +46,7 @@ CREATE TABLE [dbo].[FacturaRenglones](
 	[FacturaId] [int] NOT NULL,
 	[ArticuloId] [int] NOT NULL,
 	[Cantidad] [int] NOT NULL,
+	    [Subtotal] [decimal](18, 4) NOT NULL
  CONSTRAINT [PK_FacturaRenglones] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -61,6 +63,11 @@ CREATE TABLE [dbo].[Facturas](
 	[Numero] [int] NOT NULL,
 	[Fecha] [date] NOT NULL,
 	[ClienteId] [int] NOT NULL,
+	[TotalIVa] [decimal](18, 4) NOT NULL,
+	[TotalConImpuestos] [decimal](18, 4) NOT NULL,
+	[TotalSinImpuestos] [decimal](18, 4) NOT NULL,
+    [PorcentajeIva] [decimal](18, 4) NOT NULL
+
  CONSTRAINT [PK_Facturas] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
