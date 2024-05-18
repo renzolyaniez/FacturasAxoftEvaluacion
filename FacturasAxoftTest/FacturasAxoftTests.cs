@@ -1,4 +1,4 @@
-using FacturasAxoft.Clases;
+using FacturasAxoft.Models;
 using FacturasAxoft.Excepciones;
 using FacturasAxoft.Validaciones;
 using Xunit;
