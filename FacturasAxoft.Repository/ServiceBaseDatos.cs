@@ -126,17 +126,104 @@ namespace FacturasAxoft.Repository
 
         public List<Articulo> TraerTodosLosArticulos()
         {
-            throw new NotImplementedException();
+
+            var query = "select id, codigo, descripcion, precio from Articulos;";
+
+            List<Articulo> articulos = new List<Articulo>();
+            using (SqlCommand command = new SqlCommand(query, _connection, _transaction))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    DataTable dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        Articulo articulo = new Articulo
+                        {
+                            Codigo = row["Codigo"].ToString(),
+                            Descripcion = row["Descripcion"].ToString(),
+                            Precio = Convert.ToDouble(row["Precio"])
+                        };
+                        articulos.Add(articulo);
+                    }
+                }
+
+            }
+            return articulos;
         }
 
         public List<Cliente> TraerTodosLosClientes()
         {
-            throw new NotImplementedException();
+
+            var query = "select id, cuil, nombre, direccion, porcentajeIva from Clientes;";
+
+            List<Cliente> clientes = new List<Cliente>();
+            using (SqlCommand command = new SqlCommand(query, _connection, _transaction))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    DataTable dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        Cliente cliente = new Cliente
+                        {
+                            Cuil = row["Cuil"].ToString(),
+                            Nombre = row["Nombre"].ToString(),
+                            Direccion = row["Direccion"].ToString(),
+                            PorcentajeIVA = Convert.ToDecimal(row["PorcentajeIVA"])
+                        };
+                        clientes.Add(cliente);
+                    }
+                }
+
+            }
+            return clientes;
         }
 
         public List<Factura> TraerTodasLasFacturas()
         {
-            throw new NotImplementedException();
+            var query = @"select fc.Numero, fc.Fecha, fc.ClienteId, fc.TotalIVa, 
+                         fc.TotalConImpuestos, fc.TotalSinImpuestos, fc.PorcentajeIva,
+	                    cl.Cuil, cl.PorcentajeIva ivacliente,cl.Nombre 
+                        from facturas fc inner join clientes cl on fc.ClienteId=cl.Id;";
+
+
+            List<Factura> facturas = new List<Factura>();
+            using (SqlCommand command = new SqlCommand(query, _connection, _transaction))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    DataTable dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        Cliente clienteFactura = new Cliente();
+
+                        clienteFactura.Cuil = row["Cuil"].ToString();
+                        clienteFactura.Nombre = row["Nombre"].ToString();
+
+                        Factura factura = new Factura
+                        {
+
+
+
+                            Numero = Convert.ToInt32(row["Numero"]),
+                            Fecha = Convert.ToDateTime(row["Fecha"]),
+                            Cliente = clienteFactura,
+                            PorcentajeIVA = Convert.ToDecimal(row["PorcentajeIVA"]),
+                            TotalConImpuestos = Convert.ToDecimal(row["TotalConImpuestos"]),
+                            TotalSinImpuestos = Convert.ToDecimal(row["TotalSinImpuestos"]),
+                            IVA = Convert.ToDecimal(row["Totaliva"])
+                        };
+
+                        facturas.Add(factura);
+
+                    }
+                }
+
+            }
+            return facturas;
         }
     }
 }

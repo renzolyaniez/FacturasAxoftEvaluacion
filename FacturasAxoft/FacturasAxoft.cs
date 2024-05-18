@@ -5,6 +5,8 @@ using Microsoft.Data.SqlClient;
 using System.Xml.Serialization;
 using System.Data;
 using FacturasAxoft.Validaciones;
+using FacturasAxoft.Models;
+using System.Runtime.InteropServices;
 
 namespace FacturasAxoft
 {
@@ -46,7 +48,11 @@ namespace FacturasAxoft
 
                 // Ahora puedes trabajar con el objeto `facturas`
 
-                
+                var listaArticulos = serviceBaseDatos.TraerTodosLosArticulos();
+
+                var listaClientes = serviceBaseDatos.TraerTodosLosClientes();
+
+                var listaFacturas = serviceBaseDatos.TraerTodasLasFacturas();
 
                 serviceBaseDatos.IniciarTransaccion();
 
@@ -54,7 +60,12 @@ namespace FacturasAxoft
                 {
                     foreach (var factura in facturas.Factura)
                     {
-                        //ValidadorFacturasAxoft validador = new ValidadorFacturasAxoft();
+                        ValidadorFacturasAxoft validador = new ValidadorFacturasAxoft( listaClientes,listaArticulos,listaFacturas);
+
+                        // metodo para convertir la factura xml en un objeto de tipo factura de la clase base
+                        var facturaParaValidar =  FacturaParaValidar(factura);
+
+                        validador.ValidarNuevaFactura(facturaParaValidar);
 
                         //- Primero insertamos la cabecera de la factura
                         string sentencia = @"insert into Facturas (Numero, Fecha, Clienteid, 
@@ -345,6 +356,28 @@ namespace FacturasAxoft
             }
 
             return "Errores";
+        }
+
+        private Factura FacturaParaValidar(FacturaXml facturaAValidar )
+
+        {
+            Factura retorno=new Factura();
+
+            retorno.Numero = facturaAValidar.Numero;
+            retorno.Fecha = Convert.ToDateTime( facturaAValidar.Fecha);
+
+            var cliente = new Cliente();
+            cliente.Nombre = facturaAValidar.Cliente.Nombre;
+            cliente.Cuil=facturaAValidar.Cliente.Cuil;
+            
+            retorno.Cliente = cliente;
+
+            retorno.PorcentajeIVA = facturaAValidar.Iva;
+            retorno.TotalConImpuestos=facturaAValidar.TotalConImpuestos;
+            retorno.TotalSinImpuestos = facturaAValidar.TotalSinImpuestos;            
+
+
+            return retorno;
         }
     }
 }
