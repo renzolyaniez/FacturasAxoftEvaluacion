@@ -1,4 +1,5 @@
 ﻿using FacturasAxoft.Interfaces;
+using FacturasAxoft.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -121,6 +122,21 @@ namespace FacturasAxoft.Repository
                     return dataTable;
                 }
             }
+        }
+
+        public List<Articulo> TraerTodosLosArticulos()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Cliente> TraerTodosLosClientes()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Factura> TraerTodasLasFacturas()
+        {
+            throw new NotImplementedException();
         }
     }
 }

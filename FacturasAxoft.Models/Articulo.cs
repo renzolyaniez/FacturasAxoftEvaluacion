@@ -1,4 +1,4 @@
-﻿namespace FacturasAxoft.Clases
+﻿namespace FacturasAxoft.Models
 {
     /// <summary>
     /// Clase que representa a un artículo.

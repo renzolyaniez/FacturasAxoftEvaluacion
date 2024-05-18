@@ -4,6 +4,7 @@ using FacturasAxoft.Repository;
 using Microsoft.Data.SqlClient;
 using System.Xml.Serialization;
 using System.Data;
+using FacturasAxoft.Validaciones;
 
 namespace FacturasAxoft
 {
@@ -45,6 +46,7 @@ namespace FacturasAxoft
 
                 // Ahora puedes trabajar con el objeto `facturas`
 
+                
 
                 serviceBaseDatos.IniciarTransaccion();
 
@@ -52,6 +54,8 @@ namespace FacturasAxoft
                 {
                     foreach (var factura in facturas.Factura)
                     {
+                        //ValidadorFacturasAxoft validador = new ValidadorFacturasAxoft();
+
                         //- Primero insertamos la cabecera de la factura
                         string sentencia = @"insert into Facturas (Numero, Fecha, Clienteid, 
                                         TotalSinImpuestos,

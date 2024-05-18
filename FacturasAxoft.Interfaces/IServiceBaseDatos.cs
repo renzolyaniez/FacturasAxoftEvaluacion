@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using System.Data;
+using FacturasAxoft.Models;
 
 namespace FacturasAxoft.Interfaces
 {
@@ -14,7 +15,9 @@ namespace FacturasAxoft.Interfaces
         void ConfirmarTransaccion();
         void CancelarTransaccion();
         void CerrarConexion();
-
+        List<Articulo> TraerTodosLosArticulos();
+        List<Cliente> TraerTodosLosClientes();
+        List<Factura> TraerTodasLasFacturas();
         public DataTable EjecutarProcedimientoAlmacenado(string procedureName, SqlParameter[] parameters);
 
     }

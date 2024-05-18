@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FacturasAxoft.Interfaces\FacturasAxoft.Interfaces.csproj" />
+    <ProjectReference Include="..\FacturasAxoft.Models\FacturasAxoft.Models.csproj" />
     <ProjectReference Include="..\FacturasAxoft.Repository\FacturasAxoft.Repository.csproj" />
   </ItemGroup>
 

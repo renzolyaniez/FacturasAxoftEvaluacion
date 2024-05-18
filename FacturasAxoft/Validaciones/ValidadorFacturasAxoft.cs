@@ -1,5 +1,6 @@
 ﻿using FacturasAxoft.Clases;
 using FacturasAxoft.Excepciones;
+using FacturasAxoft.Models;
 
 namespace FacturasAxoft.Validaciones
 {
