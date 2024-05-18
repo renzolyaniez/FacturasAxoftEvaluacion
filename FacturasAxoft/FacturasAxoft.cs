@@ -52,7 +52,7 @@ namespace FacturasAxoft
 
                 var listaClientes = serviceBaseDatos.TraerTodosLosClientes();
 
-                var listaFacturas = serviceBaseDatos.TraerTodasLasFacturas();
+              
 
                 serviceBaseDatos.IniciarTransaccion();
 
@@ -60,6 +60,8 @@ namespace FacturasAxoft
                 {
                     foreach (var factura in facturas.Factura)
                     {
+                        var listaFacturas = serviceBaseDatos.TraerTodasLasFacturas();
+
                         ValidadorFacturasAxoft validador = new ValidadorFacturasAxoft( listaClientes,listaArticulos,listaFacturas);
 
                         // metodo para convertir la factura xml en un objeto de tipo factura de la clase base
@@ -113,6 +115,10 @@ namespace FacturasAxoft
                     Console.WriteLine(ex.ToString());
 
                     serviceBaseDatos.CancelarTransaccion();
+
+                    Console.WriteLine("No se procesaron las facturas proceso cancelado");
+
+                    return;
                 }
 
                 serviceBaseDatos.ConfirmarTransaccion();
@@ -369,13 +375,29 @@ namespace FacturasAxoft
             var cliente = new Cliente();
             cliente.Nombre = facturaAValidar.Cliente.Nombre;
             cliente.Cuil=facturaAValidar.Cliente.Cuil;
+            cliente.PorcentajeIVA = facturaAValidar.Iva;
+            cliente.Direccion = facturaAValidar.Cliente.Direccion;
             
             retorno.Cliente = cliente;
 
             retorno.PorcentajeIVA = facturaAValidar.Iva;
             retorno.TotalConImpuestos=facturaAValidar.TotalConImpuestos;
-            retorno.TotalSinImpuestos = facturaAValidar.TotalSinImpuestos;            
+            retorno.TotalSinImpuestos = facturaAValidar.TotalSinImpuestos;
+            retorno.IVA = facturaAValidar.ImporteIva;
+            retorno.Renglones = new List<RenglonFactura>();
 
+            foreach ( var reglonesXml in facturaAValidar.Renglones)
+            {
+                var renglonfactura = new RenglonFactura();
+                renglonfactura.Articulo = new Articulo();
+                renglonfactura.Articulo.Codigo = reglonesXml.CodigoArticulo;
+                renglonfactura.Articulo.Descripcion = reglonesXml.Descripcion;
+                renglonfactura.Articulo.Precio = Convert.ToDouble( reglonesXml.PrecioUnitario);
+                renglonfactura.SubTotal = reglonesXml.Total;
+                renglonfactura.cantidad =  reglonesXml.Cantidad  ;
+                retorno.Renglones.Add(renglonfactura); 
+            }
+           
 
             return retorno;
         }

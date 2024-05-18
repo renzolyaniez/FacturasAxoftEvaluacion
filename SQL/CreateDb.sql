@@ -103,7 +103,7 @@ insert into Clientes (Cuil, Nombre, Direccion, PorcentajeIVA) values
 
 
 insert into Articulos (Codigo, Descripcion, Precio) values
-('AR001','Producto 1', 30);
+('AR001','Producto 1', 10);
 
 insert into Articulos (Codigo, Descripcion, Precio) values
 ('AR002','Producto 2', 20);

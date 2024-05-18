@@ -5,7 +5,7 @@
         <fecha>31/12/2020</fecha>
         <cliente>
             <CUIL>20345678901</CUIL>
-            <nombre>Juan Pérez</nombre>
+            <nombre>Juan Perez</nombre>
             <direccion>Calle 123, Ciudad</direccion>
         </cliente>
         <renglones>
@@ -60,7 +60,7 @@
     
     <!-- Factura 20 -->
     <factura>
-        <numero>20</numero>
+        <numero>3</numero>
         <fecha>15/01/2021</fecha>
         <cliente>
             <CUIL>90876543210</CUIL>
@@ -80,6 +80,6 @@
         <totalSinImpuestos>25.00</totalSinImpuestos>
         <iva>21.00</iva>
         <importeIva>5.25</importeIva>
-        <totalConImpuestos>20.25</totalConImpuestos>
+        <totalConImpuestos>30.25</totalConImpuestos>
     </factura>
 </facturas>
